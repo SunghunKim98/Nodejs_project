@@ -1,3 +1,6 @@
+#Management System
+이번 프로젝트의 목적은 React와 Node js를 이용한 웹사이트를 만들어보는 것입니다.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
