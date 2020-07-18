@@ -25,7 +25,7 @@ const upload = multer({dest: './upload'})
 
 app.get('/api/customers', (req,res) => { 
     connection.query(
-		"select * from CUSTOMER",
+		"select * from CUSTOMER where isDeleted = 0",
 		(err,rows,fields) => {
 				res.send(rows);
 		}
@@ -35,7 +35,7 @@ app.get('/api/customers', (req,res) => {
 app.use('/image',express.static('./upload'));
 
 app.post('/api/customers', upload.single('image'), (req,res) => {
-	let sql = 'insert into CUSTOMER value (null,?,?,?,?,?)';
+	let sql = 'insert into CUSTOMER value (null,?,?,?,?,?,now(),0)';
 	let image = '/image/'+req.file.filename;
 	let name = req.body.name;
 	let birthday = req.body.birthday;
@@ -50,6 +50,15 @@ app.post('/api/customers', upload.single('image'), (req,res) => {
 			console.log(rows);
 		}
 	)
+})
+
+app.delete('/api/customers/:id',(req,res) => {
+	let sql = 'update CUSTOMER set isDeleted = 1 where id = ?'
+	let params = [req.params.id];
+	connection.query(sql,params,
+		(err,rows,fields) => {
+			res.send(rows);
+		})
 })
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
